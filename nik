@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Matérias</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .student-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #e8f4f8;
+            border-radius: 8px;
+        }
+        
+        .materias-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .materia {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .materia:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .materia h3 {
+            margin-top: 0;
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .notas {
+            margin: 15px 0;
+        }
+        
+        .nota-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .media {
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .aprovado {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .reprovado {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .professor {
+            font-style: italic;
+            color: #7f8c8d;
+        }
+        
+        .semestre {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        
+        .add-nota {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .add-nota:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Meu Desempenho </h1>
+        
+        <div class="student-info">
+            <div>
+                <h2>Nikolas Ananias</h2>
+                <p>Matrícula: 00000000</p>
+                <p>Curso: Segundo Grau</p>
+            </div>
+            <div>
+                <p class="semestre">Semestre: 2023.2</p>
+                <p>CR: 8.7</p>
+            </div>
+        </div>
+        
+        <div class="materias-container" id="materias-container">
+            <!-- Matérias serão inseridas aqui pelo JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Dados das matérias
+        const materias = [
+            {
+                nome: "Cálculo I",
+                professor: "Prof. Carlos Eduardo",
+                notas: [7.5, 8.0, 6.5],
+                cargaHoraria: 60
+            },
+            {
+                nome: "Programação I",
+                professor: "Prof. Ana Maria",
+                notas: [9.0, 8.5, 9.5],
+                cargaHoraria: 60
+            },
+            {
+                nome: "Pensamento Computacional",
+                professor: "Prof. Renato",
+                notas: [6.0, 7.0, 5.5],
+                cargaHoraria: 45
+            },
+            {
+                nome: "Física I",
+                professor: "Prof. Juliana Santos",
+                notas: [8.0, 7.5, 8.5],
+                cargaHoraria: 60
+            },
+            {
+                nome: "Introdução à Computação",
+                professor: "Prof. Luiz Fernando",
+                notas: [10.0, 9.5, 9.0],
+                cargaHoraria: 30
+            }
+        ];
+
+        // Função para calcular a média
+        function calcularMedia(notas) {
+            const soma = notas.reduce((total, nota) => total + nota, 0);
+            return (soma / notas.length).toFixed(2);
+        }
+
+        // Função para verificar se foi aprovado
+        function verificarAprovacao(media) {
+            return media >= 6.0 ? "Aprovado" : "Reprovado";
+        }
+
+        // Função para criar o card de uma matéria
+        function criarCardMateria(materia) {
+            const media = calcularMedia(materia.notas);
+            const status = verificarAprovacao(media);
+            
+            const card = document.createElement('div');
+            card.className = 'materia';
+            
+            card.innerHTML = `
+                <h3>${materia.nome}</h3>
+                <p class="professor">${materia.professor}</p>
+                <p>Carga horária: ${materia.cargaHoraria}h</p>
+                
+                <div class="notas">
+                    <h4>Notas:</h4>
+                    ${materia.notas.map((nota, index) => `
+                        <div class="nota-item">
+                            <span>Nota ${index + 1}:</span>
+                            <span>${nota.toFixed(1)}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="media ${status.toLowerCase()}">
+                    Média: ${media} - ${status}
+                </div>
+                
+                <button class="add-nota">Adicionar Nota</button>
+            `;
+            
+            return card;
+        }
+
+        // Adicionar todas as matérias ao container
+        const container = document.getElementById('materias-container');
+        materias.forEach(materia => {
+            container.appendChild(criarCardMateria(materia));
+        });
+
+        // Adicionar funcionalidade ao botão "Adicionar Nota"
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('add-nota')) {
+                const materiaCard = e.target.closest('.materia');
+                const materiaNome = materiaCard.querySelector('h3').textContent;
+                const materia = materias.find(m => m.nome === materiaNome);
+                
+                if (materia) {
+                    const novaNota = parseFloat(prompt(`Digite a nova nota para ${materia.nome}:`));
+                    if (!isNaN(novaNota)) {
+                        materia.notas.push(novaNota);
+                        
+                        // Recriar o card com a nova nota
+                        const novoCard = criarCardMateria(materia);
+                        materiaCard.parentNode.replaceChild(novoCard, materiaCard);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
